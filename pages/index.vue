@@ -36,27 +36,28 @@ const { selectedValues: selectedTypes, toggle: toggleType } = useFilter(Types)
 const { selectedValues: selectedAfflatus, toggle: toggleAfflatus } = useFilter(Afflatus)
 const { selectedValues: selectedTags, toggle: toggleTags } = useFilter(Tags)
 
+const isActive = (list, value) => {
+  if (value === "ALL") {
+    return list.length === 0
+  }
+  return list.includes(value)
+}
+
+const filterBySelected = (list, selected, key) => {
+  if (selected.length === 0) {
+    return list
+  }
+  return list.filter((item) => selected.some((value) => item[key].includes(value)))
+}
+
+// 一覧表示
 const displayList = computed(() => {
   const list = psychubes.value || []
-  let filteredList = list
-
-  if (selectedTypes.value.length > 0) {
-    filteredList = filteredList.filter((psychube) => {
-      return selectedTypes.value.some((selectedType) => psychube.type.includes(selectedType))
-    })
-  }
-
-  if (selectedAfflatus.value.length > 0) {
-    filteredList = filteredList.filter((psychube) => {
-      return selectedAfflatus.value.some((selectedAfflatusName) => psychube.afflatus.includes(selectedAfflatusName))
-    })
-  }
-
-  if (selectedTags.value.length > 0) {
-    filteredList = filteredList.filter((psychube) => {
-      return selectedTags.value.some((selectedTag) => psychube.tags.includes(selectedTag))
-    })
-  }
+  let filteredList = [
+    { selected: selectedTypes.value, key: "type" },
+    { selected: selectedAfflatus.value, key: "afflatus" },
+    { selected: selectedTags.value, key: "tags" },
+  ].reduce((acc, { selected, key }) => filterBySelected(acc, selected, key), list)
 
   return [...filteredList].sort((a, b) => {
     const rarityDiff = b.rarity - a.rarity
@@ -73,48 +74,71 @@ useSeoMeta({
 </script>
 
 <template>
-  <main>
-    <h1>リバース1999：心相一覧</h1>
+  <main class="p-10">
+    <h1 class="text-xl font-bold">リバース1999：心相一覧</h1>
 
-    <section>
-      <p>照合結果：{{ displayList.length || 0 }} 件</p>
-      <dl>
-        <dt>心相タイプ</dt>
-        <dd>
-          <button @click="toggleType('ALL', 'ALL')" :aria-pressed="selectedTypes.length === 0">ALL</button>
+    <section class="bg-black/50 py-2 my-3">
+      <p class="border-b border-solid border-c-separate px-5 pb-2">照合結果：{{ displayList.length || 0 }} 件</p>
+      <dl class="grid grid-cols-[auto_1fr] gap-5 items-center mt-3">
+        <dt class="pl-6">タイプ</dt>
+        <dd class="flex flex-wrap gap-1">
+          <button
+            class="btn-filter"
+            :data-active="isActive(selectedTypes, 'ALL')"
+            :aria-pressed="isActive(selectedTypes, 'ALL')"
+            @click="toggleType('ALL', 'ALL')"
+          >
+            ALL
+          </button>
           <button
             v-for="type in Types"
             :key="type"
+            class="btn-filter"
+            :data-active="isActive(selectedTypes, type)"
+            :aria-pressed="isActive(selectedTypes, type)"
             @click="toggleType(type, 'ALL')"
-            :aria-pressed="selectedTypes.includes(type)"
           >
             {{ type }}
           </button>
         </dd>
-      </dl>
-      <dl>
-        <dt>本源指定</dt>
-        <dd>
-          <button @click="toggleAfflatus('CLEAR', 'CLEAR')" :aria-pressed="selectedAfflatus.length === 0">CLEAR</button>
+        <dt class="pl-6">本源</dt>
+        <dd class="flex flex-wrap gap-1">
+          <button
+            class="btn-filter"
+            :data-active="isActive(selectedAfflatus, 'ALL')"
+            :aria-pressed="isActive(selectedAfflatus, 'ALL')"
+            @click="toggleAfflatus('ALL', 'ALL')"
+          >
+            ALL
+          </button>
           <button
             v-for="afflatusName in Afflatus"
             :key="afflatusName"
-            @click="toggleAfflatus(afflatusName, 'CLEAR')"
-            :aria-pressed="selectedAfflatus.includes(afflatusName)"
+            class="btn-filter"
+            :data-active="isActive(selectedAfflatus, afflatusName)"
+            :aria-pressed="isActive(selectedAfflatus, afflatusName)"
+            @click="toggleAfflatus(afflatusName, 'ALL')"
           >
             {{ afflatusName }}
           </button>
         </dd>
-      </dl>
-      <dl>
-        <dt>Tags</dt>
-        <dd>
-          <button @click="toggleTags('CLEAR', 'CLEAR')" :aria-pressed="selectedTags.length === 0">CLEAR</button>
+        <dt class="pl-6">タグ</dt>
+        <dd class="flex flex-wrap gap-1 pb-2">
+          <button
+            class="btn-filter"
+            :data-active="isActive(selectedTags, 'ALL')"
+            :aria-pressed="isActive(selectedTags, 'ALL')"
+            @click="toggleTags('ALL', 'ALL')"
+          >
+            ALL
+          </button>
           <button
             v-for="tags in Tags"
             :key="tags"
-            @click="toggleTags(tags, 'CLEAR')"
-            :aria-pressed="selectedTags.includes(tags)"
+            class="btn-filter"
+            :data-active="isActive(selectedTags, tags)"
+            :aria-pressed="isActive(selectedTags, tags)"
+            @click="toggleTags(tags, 'ALL')"
           >
             {{ tags }}
           </button>
@@ -133,7 +157,7 @@ useSeoMeta({
       <div v-else>
         <article v-for="psychube in displayList" :key="psychube.id">
           <img :src="`/images/psychubes/icon-${psychube.id}.png`" :alt="psychube.name" />
-          <h2>{{ psychube.name }}</h2>
+          <h2 class="text-center">{{ psychube.name }}</h2>
         </article>
 
         <p v-if="displayList.length === 0">No DATE</p>

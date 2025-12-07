@@ -1,1 +1,35 @@
+:root {
+  --color-base: #e9dccd;
+  --color-background: #071f3b;
+  --color-accent: #b55829;
+  --color-separate: #45392f;
+}
+
+@theme {
+  --color-c-base: var(--color-base);
+  --color-c-accent: var(--color-accent);
+  --color-c-separate: var(--color-separate);
+}
+
 @import "tailwindcss";
+
+@layer base {
+  body {
+    color: var(--color-base);
+    background-color: var(--color-background);
+  }
+}
+
+@layer components {
+  .btn-filter {
+    @apply border border-solid border-c-base rounded-sm
+    px-2 py-0.5
+    transition-colors duration-300 cursor-pointer whitespace-nowrap;
+  }
+  .btn-filter:not([data-active="true"]):hover {
+    @apply bg-c-separate;
+  }
+  .btn-filter[data-active="true"] {
+    @apply border-c-accent bg-c-accent font-bold;
+  }
+}
