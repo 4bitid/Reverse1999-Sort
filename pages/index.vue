@@ -3,6 +3,7 @@
 // const route = useRoute()
 // console.log("Current path:", route.fullPath)
 
+import { useFilter } from "~/composables/useFilter"
 import { computed, ref } from "vue"
 const { data: psychubes, pending, error } = await useFetch("/data/psychubes.json")
 
@@ -30,9 +31,10 @@ const Tags = [
   "電力",
   "血の薪",
 ]
-const selectedTypes = ref<string[]>([])
-const selectedAfflatus = ref<string[]>([])
-const selectedTags = ref<string[]>([])
+
+const { selectedValues: selectedTypes, toggle: toggleType } = useFilter(Types)
+const { selectedValues: selectedAfflatus, toggle: toggleAfflatus } = useFilter(Afflatus)
+const { selectedValues: selectedTags, toggle: toggleTags } = useFilter(Tags)
 
 const displayList = computed(() => {
   const list = psychubes.value || []
@@ -63,48 +65,6 @@ const displayList = computed(() => {
   })
 })
 
-const toggleType = (type: string) => {
-  if (type === "ALL") {
-    selectedTypes.value = []
-    return
-  }
-
-  const index = selectedTypes.value.indexOf(type)
-  if (index === -1) {
-    selectedTypes.value.push(type)
-  } else {
-    selectedTypes.value.splice(index, 1)
-  }
-}
-
-const toggleAfflatus = (afflatus: string) => {
-  if (afflatus === "CLEAR") {
-    selectedAfflatus.value = []
-    return
-  }
-
-  const index = selectedAfflatus.value.indexOf(afflatus)
-  if (index === -1) {
-    selectedAfflatus.value.push(afflatus)
-  } else {
-    selectedAfflatus.value.splice(index, 1)
-  }
-}
-
-const toggleTags = (tags: string) => {
-  if (tags === "CLEAR") {
-    selectedTags.value = []
-    return
-  }
-
-  const index = selectedTags.value.indexOf(tags)
-  if (index === -1) {
-    selectedTags.value.push(tags)
-  } else {
-    selectedTags.value.splice(index, 1)
-  }
-}
-
 // Metadata Settinigs
 useSeoMeta({
   title: "【リバース：1999】心相一覧 - Reverse:1999 Psychubes Sort",
@@ -117,15 +77,15 @@ useSeoMeta({
     <h1>リバース1999：心相一覧</h1>
 
     <section>
-      <p>照合結果：{{ psychubes?.length || 0 }} 件</p>
+      <p>照合結果：{{ displayList.length || 0 }} 件</p>
       <dl>
         <dt>心相タイプ</dt>
         <dd>
-          <button @click="toggleType('ALL')" :aria-pressed="selectedTypes.length === 0">ALL</button>
+          <button @click="toggleType('ALL', 'ALL')" :aria-pressed="selectedTypes.length === 0">ALL</button>
           <button
             v-for="type in Types"
             :key="type"
-            @click="toggleType(type)"
+            @click="toggleType(type, 'ALL')"
             :aria-pressed="selectedTypes.includes(type)"
           >
             {{ type }}
@@ -135,11 +95,11 @@ useSeoMeta({
       <dl>
         <dt>本源指定</dt>
         <dd>
-          <button @click="toggleAfflatus('CLEAR')" :aria-pressed="selectedAfflatus.length === 0">CLEAR</button>
+          <button @click="toggleAfflatus('CLEAR', 'CLEAR')" :aria-pressed="selectedAfflatus.length === 0">CLEAR</button>
           <button
             v-for="afflatusName in Afflatus"
             :key="afflatusName"
-            @click="toggleAfflatus(afflatusName)"
+            @click="toggleAfflatus(afflatusName, 'CLEAR')"
             :aria-pressed="selectedAfflatus.includes(afflatusName)"
           >
             {{ afflatusName }}
@@ -149,11 +109,11 @@ useSeoMeta({
       <dl>
         <dt>Tags</dt>
         <dd>
-          <button @click="toggleTags('CLEAR')" :aria-pressed="selectedAfflatus.length === 0">CLEAR</button>
+          <button @click="toggleTags('CLEAR', 'CLEAR')" :aria-pressed="selectedTags.length === 0">CLEAR</button>
           <button
             v-for="tags in Tags"
             :key="tags"
-            @click="toggleTags(tags)"
+            @click="toggleTags(tags, 'CLEAR')"
             :aria-pressed="selectedTags.includes(tags)"
           >
             {{ tags }}
@@ -174,7 +134,6 @@ useSeoMeta({
         <article v-for="psychube in displayList" :key="psychube.id">
           <img :src="`/images/psychubes/icon-${psychube.id}.png`" :alt="psychube.name" />
           <h2>{{ psychube.name }}</h2>
-          <p>レアリティ: ★{{ psychube.rarity }} / ID: {{ psychube.id }}</p>
         </article>
 
         <p v-if="displayList.length === 0">No DATE</p>
