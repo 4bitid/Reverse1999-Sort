@@ -4,6 +4,22 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
 
-  "typescript.inhibitGoToDefinition": true,
-  "javascript.inhibitGoToDefinition": true
+  // "typescript.inhibitGoToDefinition": true,
+  // "javascript.inhibitGoToDefinition": true,
+
+  "vue.template.completion.preferredLocation": "auto",
+  "vue.template.completion.useHtmlLanguageService": true,
+
+  "emmet.includeLanguages": {
+    "vue-html": "html"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "files.associations": {
+    "*.vue": "vue"
+  },
+  "html.suggest.html5": true,
+
+  "security.workspace.trust.enabled": true
 }
