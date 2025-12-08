@@ -1,14 +1,20 @@
 :root {
-  --color-base: #e9dccd;
+  --color-base: #e9e3cd;
   --color-background: #071f3b;
+  --color-primary: #342929;
   --color-accent: #b55829;
+  --color-contrast: #d3d1cf;
   --color-separate: #45392f;
+  --color-secondary: #b57f51;
 }
 
 @theme {
   --color-c-base: var(--color-base);
+  --color-c-primary: var(--color-primary);
+  --color-c-secondary: var(--color-secondary);
   --color-c-accent: var(--color-accent);
   --color-c-separate: var(--color-separate);
+  --color-c-contrast: var(--color-contrast);
 }
 
 @layer base {

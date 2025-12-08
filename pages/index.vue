@@ -11,7 +11,6 @@ import { useFilter } from "~/composables/useFilter"
 import { computed, ref } from "vue"
 const { data: psychubes, pending, error } = await useFetch("/data/psychubes.json")
 
-// Filter Logics
 const Types = ["攻撃", "クリティカル", "回復", "生存", "サポート"]
 const Afflatus = ["獣", "木", "星", "岩", "霊", "知"]
 const Tags = [
@@ -36,6 +35,13 @@ const Tags = [
   "暗殺",
 ]
 
+// Preview Logics
+const previewItem = ref(null)
+const setPreview = (item) => {
+  previewItem.value = item
+}
+
+// Filter Logics
 const { selectedValues: selectedTypes, toggle: toggleType } = useFilter(Types)
 const { selectedValues: selectedAfflatus, toggle: toggleAfflatus } = useFilter(Afflatus)
 const { selectedValues: selectedTags, toggle: toggleTags } = useFilter(Tags)
@@ -80,6 +86,33 @@ useSeoMeta({
 <template>
   <main class="max-w-7xl px-5 md:px-10 py-10 mx-auto">
     <h1 class="text-xl font-bold">リバース1999：心相一覧</h1>
+
+    <section v-if="previewItem" class="bg-black/30 p-4 mt-3">
+      <article class="flex flex-col gap-1 sm:flex-row bg-c-contrast text-c-primary py-3">
+        <img
+          :src="`/images/psychubes/${previewItem.id}.png`"
+          :alt="previewItem.name"
+          class="w-60 shrink-0 -mb-10 mx-auto sm:-ml-2"
+        />
+        <div class="flex-1 px-5">
+          <h2 class="border-b border-solid border-c-secondary text-xl font-bold p-1">
+            {{ previewItem.name }}
+          </h2>
+          <ul class="flex gap-2 mt-2">
+            <li
+              v-for="type in previewItem.type"
+              :key="type"
+              class="bg-c-primary rounded text-c-base text-xs px-2 py-0.5"
+            >
+              {{ type }}
+            </li>
+          </ul>
+          <p class="whitespace-pre-wrap mt-2">
+            {{ previewItem.amplification }}
+          </p>
+        </div>
+      </article>
+    </section>
 
     <section class="bg-black/30 py-2 my-3">
       <p class="border-b border-solid border-c-separate px-5 pb-2">照合結果：{{ displayList.length || 0 }} 件</p>
@@ -159,9 +192,11 @@ useSeoMeta({
       </p>
 
       <div v-else class="grid gap-2 grid-cols-[repeat(auto-fit,minmax(100px,1fr))]">
-        <article v-for="psychube in displayList" :key="psychube.id" class="text-center">
-          <img :src="`/images/psychubes/icon-${psychube.id}.png`" :alt="psychube.name" class="-mb-2" />
-          <h2 class="text-sm pc:text-base text-shadow-lg">{{ psychube.name }}</h2>
+        <article v-for="psychube in displayList" :key="psychube.id">
+          <button class="cursor-pointer" @click="setPreview(psychube)">
+            <img :src="`/images/psychubes/icon-${psychube.id}.png`" :alt="psychube.name" class="-mb-2" />
+            <h2 class="text-sm pc:text-base text-shadow-lg">{{ psychube.name }}</h2>
+          </button>
         </article>
 
         <p v-if="displayList.length === 0">No DATE</p>
