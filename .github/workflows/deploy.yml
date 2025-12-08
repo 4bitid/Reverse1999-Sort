@@ -15,7 +15,7 @@ jobs:
       id-token: write
 
     env:
-      BASE_URL: "/[Reverse1999-Sort]/"
+      BASE_URL: "/Reverse1999-Sort/"
 
     steps:
       - name: Checkout

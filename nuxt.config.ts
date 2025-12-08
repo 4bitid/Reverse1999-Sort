@@ -20,7 +20,8 @@ export default defineNuxtConfig({
 
   app: {
     baseURL: "/Reverse1999-Sort/",
-    buildAssetsDir: "/_nuxt/",
-    ssr: true,
+  },
+  nitro: {
+    preset: "github-pages",
   },
 })
