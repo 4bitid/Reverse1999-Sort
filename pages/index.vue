@@ -14,12 +14,18 @@ const { data: psychubes, pending, error } = await useFetch("/data/psychubes.json
 const Types = ["攻撃", "クリティカル", "回復", "生存", "サポート"]
 const Afflatus = ["獣", "木", "星", "岩", "霊", "知"]
 const Tags = [
+  "ステータス低下",
   "状態異常",
   "行動阻害",
-  "ステータス低下",
+  "武装解除",
+  "沈黙",
+  "気絶",
+  "悪夢",
+  "めまい",
   "中毒",
   "燃焼",
   "状態強化",
+  "継続回復",
   "チャネル",
   "力場",
   "ひらめき",
@@ -30,15 +36,18 @@ const Tags = [
   "血の薪",
   "追加行動",
   "ジェネシスダメージ",
-  "ランクアップ",
   "バレット",
   "暗殺",
+  "ストレス",
 ]
 
 // Preview Logics
 const previewItem = ref(null)
 const setPreview = (item) => {
   previewItem.value = item
+}
+const clearPreview = () => {
+  previewItem.value = null
 }
 
 // Filter Logics
@@ -88,14 +97,14 @@ useSeoMeta({
     <h1 class="text-xl font-bold">リバース1999：心相一覧</h1>
 
     <section v-if="previewItem" class="bg-black/30 p-4 mt-3">
-      <article class="flex flex-col gap-1 sm:flex-row bg-c-contrast text-c-primary py-3">
+      <article class="relative flex flex-col gap-1 sm:flex-row bg-c-contrast text-c-primary py-3">
         <img
           :src="`/images/psychubes/${previewItem.id}.png`"
           :alt="previewItem.name"
-          class="w-60 shrink-0 -mb-10 mx-auto sm:-ml-2"
+          class="shrink-0 w-60 h-auto mx-auto sm:-ml-2"
         />
         <div class="flex-1 px-5">
-          <h2 class="border-b border-solid border-c-secondary text-xl font-bold p-1">
+          <h2 class="border-b border-solid border-c-secondary text-xl font-bold p-1 -mt-15 sm:mt-0">
             {{ previewItem.name }}
           </h2>
           <ul class="flex gap-2 mt-2">
@@ -111,6 +120,20 @@ useSeoMeta({
             {{ previewItem.amplification }}
           </p>
         </div>
+        <button
+          class="absolute top-2 right-5 w-9 cursor-pointer"
+          aria-label="プレビューを閉じる"
+          @click="clearPreview()"
+        >
+          <svg viewBox="0 0 24 24" class="w-full h-full text-c-accent" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1" />
+            <path
+              d="M39.881,43l-20.977,-20.977l2.829,-2.828l20.976,20.976l19.62,-19.62l2.829,2.829l-43.425,43.425l-2.829,-2.829l20.977,-20.976Zm27.214,20.976l-2.828,2.829l-19.3,-19.3l2.829,-2.828l19.299,19.299Z"
+              fill="currentColor"
+              transform="translate(1.6 1.2) scale(0.25)"
+            />
+          </svg>
+        </button>
       </article>
     </section>
 
@@ -191,7 +214,7 @@ useSeoMeta({
         エラー詳細: {{ error.message }}
       </p>
 
-      <div v-else class="grid gap-2 grid-cols-[repeat(auto-fit,minmax(100px,1fr))]">
+      <div v-else class="grid gap-2 grid-cols-[repeat(auto-fit,minmax(120px,1fr))]">
         <article v-for="psychube in displayList" :key="psychube.id">
           <button class="cursor-pointer" @click="setPreview(psychube)">
             <img :src="`/images/psychubes/icon-${psychube.id}.png`" :alt="psychube.name" class="-mb-2" />
