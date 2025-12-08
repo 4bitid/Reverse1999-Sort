@@ -11,8 +11,6 @@
   --color-c-separate: var(--color-separate);
 }
 
-@import "tailwindcss";
-
 @layer base {
   body {
     color: var(--color-base);
@@ -21,6 +19,17 @@
 }
 
 @layer components {
+  .bg-psychubes {
+    background-image: url("/images/psychubes/bg-psychubes.webp");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+  }
+
+  .filter-options {
+    @apply flex flex-wrap gap-1 pr-2;
+  }
+
   .btn-filter {
     @apply border border-solid border-c-base rounded-sm
     px-2 py-0.5
@@ -33,3 +42,5 @@
     @apply border-c-accent bg-c-accent font-bold;
   }
 }
+
+@import "tailwindcss";

@@ -3,6 +3,10 @@
 // const route = useRoute()
 // console.log("Current path:", route.fullPath)
 
+definePageMeta({
+  layout: "psychubes",
+})
+
 import { useFilter } from "~/composables/useFilter"
 import { computed, ref } from "vue"
 const { data: psychubes, pending, error } = await useFetch("/data/psychubes.json")
@@ -12,24 +16,24 @@ const Types = ["攻撃", "クリティカル", "回復", "生存", "サポート
 const Afflatus = ["獣", "木", "星", "岩", "霊", "知"]
 const Tags = [
   "状態異常",
-  "中毒",
   "行動阻害",
   "ステータス低下",
+  "中毒",
   "燃焼",
   "状態強化",
   "チャネル",
   "力場",
   "ひらめき",
   "陣法",
+  "電力",
   "契約",
+  "啓示",
+  "血の薪",
   "追加行動",
   "ジェネシスダメージ",
   "ランクアップ",
   "バレット",
-  "啓示",
   "暗殺",
-  "電力",
-  "血の薪",
 ]
 
 const { selectedValues: selectedTypes, toggle: toggleType } = useFilter(Types)
@@ -74,14 +78,14 @@ useSeoMeta({
 </script>
 
 <template>
-  <main class="p-10">
+  <main class="max-w-7xl px-5 md:px-10 py-10 mx-auto">
     <h1 class="text-xl font-bold">リバース1999：心相一覧</h1>
 
-    <section class="bg-black/50 py-2 my-3">
+    <section class="bg-black/30 py-2 my-3">
       <p class="border-b border-solid border-c-separate px-5 pb-2">照合結果：{{ displayList.length || 0 }} 件</p>
-      <dl class="grid grid-cols-[auto_1fr] gap-5 items-center mt-3">
+      <dl class="grid grid-cols-[auto_1fr] gap-5 items-center mt-4">
         <dt class="pl-6">タイプ</dt>
-        <dd class="flex flex-wrap gap-1">
+        <dd class="filter-options">
           <button
             class="btn-filter"
             :data-active="isActive(selectedTypes, 'ALL')"
@@ -102,7 +106,7 @@ useSeoMeta({
           </button>
         </dd>
         <dt class="pl-6">本源</dt>
-        <dd class="flex flex-wrap gap-1">
+        <dd class="filter-options">
           <button
             class="btn-filter"
             :data-active="isActive(selectedAfflatus, 'ALL')"
@@ -123,7 +127,7 @@ useSeoMeta({
           </button>
         </dd>
         <dt class="pl-6">タグ</dt>
-        <dd class="flex flex-wrap gap-1 pb-2">
+        <dd class="filter-options pb-2">
           <button
             class="btn-filter"
             :data-active="isActive(selectedTags, 'ALL')"
@@ -154,10 +158,10 @@ useSeoMeta({
         エラー詳細: {{ error.message }}
       </p>
 
-      <div v-else>
-        <article v-for="psychube in displayList" :key="psychube.id">
-          <img :src="`/images/psychubes/icon-${psychube.id}.png`" :alt="psychube.name" />
-          <h2 class="text-center">{{ psychube.name }}</h2>
+      <div v-else class="grid gap-2 grid-cols-[repeat(auto-fit,minmax(100px,1fr))]">
+        <article v-for="psychube in displayList" :key="psychube.id" class="text-center">
+          <img :src="`/images/psychubes/icon-${psychube.id}.png`" :alt="psychube.name" class="-mb-2" />
+          <h2 class="text-sm pc:text-base text-shadow-lg">{{ psychube.name }}</h2>
         </article>
 
         <p v-if="displayList.length === 0">No DATE</p>
@@ -166,6 +170,4 @@ useSeoMeta({
   </main>
 </template>
 
-<style scoped>
-/* ここにCSSを記述します */
-</style>
+<style scoped></style>
