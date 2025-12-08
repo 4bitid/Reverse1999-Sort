@@ -1,9 +1,9 @@
-import { fileURLToPath } from "url";
-import { dirname } from "path";
-import tailwindcss from "@tailwindcss/vite";
+import { fileURLToPath } from "url"
+import { dirname } from "path"
+import tailwindcss from "@tailwindcss/vite"
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -17,4 +17,10 @@ export default defineNuxtConfig({
   },
 
   modules: [],
-});
+
+  app: {
+    baseURL: "/Reverse1999-Sort/",
+    buildAssetsDir: "/_nuxt/",
+    ssr: true,
+  },
+})
