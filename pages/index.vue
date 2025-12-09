@@ -9,8 +9,14 @@ definePageMeta({
 
 import { useFilter } from "~/composables/useFilter"
 import { computed, ref } from "vue"
-const baseURL = useRuntimeConfig().app.baseURL
-const { data: psychubes, pending, error } = await useFetch(`${baseURL}data/psychubes.json`)
+
+const {
+  data: psychubes,
+  pending,
+  error,
+} = await useFetch(() => "/data/psychubes.json", {
+  server: false,
+})
 
 const Types = ["攻撃", "クリティカル", "回復", "生存", "サポート"]
 const Afflatus = ["獣", "木", "星", "岩", "霊", "知"]

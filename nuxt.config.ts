@@ -20,6 +20,28 @@ export default defineNuxtConfig({
 
   app: {
     baseURL: "/Reverse1999-Sort/",
+    head: {
+      script: [
+        {
+          src: "https://www.googletagmanager.com/gtag/js?id=G-W33J1NN4JW",
+          async: true,
+        },
+        {
+          children: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-W33J1NN4JW');
+          `,
+        },
+      ],
+    },
+  },
+
+  runtimeConfig: {
+    public: {
+      gaId: "G-W33J1NN4JW",
+    },
   },
   nitro: {
     preset: "github-pages",

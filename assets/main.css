@@ -37,15 +37,15 @@
   }
 
   .btn-filter {
-    @apply border border-solid border-c-base rounded-sm
-    px-2 py-0.5
-    transition-colors duration-300 cursor-pointer whitespace-nowrap;
+    @apply border border-solid border-c-base rounded-sm px-2 py-0.5 transition-colors duration-300 cursor-pointer whitespace-nowrap;
   }
   .btn-filter:not([data-active="true"]):hover {
-    @apply bg-c-separate;
+    background: var(--color-separate);
   }
   .btn-filter[data-active="true"] {
-    @apply border-c-accent bg-c-accent font-bold;
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    font-weight: 600;
   }
 }
 
