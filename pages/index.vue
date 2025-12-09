@@ -9,7 +9,8 @@ definePageMeta({
 
 import { useFilter } from "~/composables/useFilter"
 import { computed, ref } from "vue"
-const { data: psychubes, pending, error } = await useFetch("/data/psychubes.json")
+const baseURL = useRuntimeConfig().app.baseURL
+const { data: psychubes, pending, error } = await useFetch(`${baseURL}data/psychubes.json`)
 
 const Types = ["攻撃", "クリティカル", "回復", "生存", "サポート"]
 const Afflatus = ["獣", "木", "星", "岩", "霊", "知"]
@@ -99,7 +100,7 @@ useSeoMeta({
     <section v-if="previewItem" class="bg-black/30 p-4 mt-3">
       <article class="relative flex flex-col gap-1 sm:flex-row bg-c-contrast text-c-primary py-3">
         <img
-          :src="`/images/psychubes/${previewItem.id}.png`"
+          :src="`images/psychubes/${previewItem.id}.png`"
           :alt="previewItem.name"
           class="shrink-0 w-60 h-auto mx-auto sm:-ml-2"
         />
@@ -217,7 +218,7 @@ useSeoMeta({
       <div v-else class="grid gap-2 grid-cols-[repeat(auto-fit,minmax(120px,1fr))]">
         <article v-for="psychube in displayList" :key="psychube.id">
           <button class="cursor-pointer" @click="setPreview(psychube)">
-            <img :src="`/images/psychubes/icon-${psychube.id}.png`" :alt="psychube.name" class="-mb-2" />
+            <img :src="`images/psychubes/icon-${psychube.id}.png`" :alt="psychube.name" class="-mb-2" />
             <h2 class="text-sm pc:text-base text-shadow-lg">{{ psychube.name }}</h2>
           </button>
         </article>
