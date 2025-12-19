@@ -36,10 +36,11 @@ const Tags = [
   "チャネル",
   "力場",
   "ひらめき",
-  "陣法",
   "電力",
   "契約",
   "啓示",
+  "陣法",
+  "泳動電場",
   "血の薪",
   "追加行動",
   "ジェネシスダメージ",
@@ -95,7 +96,7 @@ const displayList = computed(() => {
 // Metadata Settinigs
 useSeoMeta({
   title: "【リバース：1999】心相一覧 - Reverse:1999 Psychubes Sort",
-  description: "リバース1999の星6心相を一覧から性能別にソートすることができます。",
+  description: "リバース1999の心相を一覧から性能別にソートすることができます。",
 })
 </script>
 
